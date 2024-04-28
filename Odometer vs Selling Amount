@@ -1,0 +1,18 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+df = pd.read_csv("car_prices.csv")
+bin_edges = [0,50000,100000,150000,200000,250000,300000,350000,400000,450000,
+             500000,550000,600000,650000,700000]
+
+
+
+odometer_counts = pd.cut(df['odometer'], bins=bin_edges).value_counts().sort_index()
+plt.bar(odometer_counts.index.astype(str), odometer_counts.values, color='skyblue')
+plt.xticks(rotation=90) 
+plt.xlabel('Odometer Range')
+plt.ylabel('Selling Amount')
+plt.title('Distribution of Odometer vs Selling Amount')
+for idx, value in enumerate(odometer_counts):
+    plt.text(idx, value, round(value, 2), ha='center', va='bottom')
+
+plt.show()
