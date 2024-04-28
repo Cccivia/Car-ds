@@ -1,0 +1,19 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+df = pd.read_csv("car_prices.csv")
+df["make"] = df["make"].str.lower()
+df["make"] = df["make"].str.split().str[0]
+counts = df["make"].value_counts()
+average_prices = df.groupby("make")["sellingprice"].mean()
+average_prices = round(average_prices,0)
+result_df_sorted = result_df.sort_values(by="Average Selling Price", ascending=False)
+plt.figure(figsize=(10, 6))  
+result_df_sorted["Average Selling Price"].plot(kind='bar') 
+plt.title('Average Selling Price by Car Brand')  
+plt.xlabel('Car Brand') 
+plt.ylabel('Average Selling Price')  
+plt.xticks(rotation=90)  
+for idx, value in enumerate(result_df_sorted["Average Selling Price"]):
+    plt.text(idx, value, round(value, 2), ha='center', va='bottom',rotation = 90)
+
+plt.show()  
