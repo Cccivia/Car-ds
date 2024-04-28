@@ -1,0 +1,24 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+df = pd.read_csv("car_prices.csv")
+df["make"] = df["make"].str.lower()
+df["make"] = df["make"].str.split().str[0]
+counts = df["make"].value_counts()
+average_mmr = df.groupby("make")["mmr"].mean()
+average_mmr = round(average_mmr, 0)
+result_df_sorted = average_mmr.sort_values(ascending=False)
+
+plt.figure(figsize=(10, 6))  
+result_df_sorted.plot(kind='bar') 
+plt.title('Average MMR by Car Brand')  
+plt.xlabel('Car Brand') 
+plt.ylabel('Average MMR')  
+plt.xticks(rotation=90)  
+
+
+for idx, value in enumerate(result_df_sorted):
+    plt.text(idx, value, round(value, 2), ha='center', va='bottom', rotation=90)
+
+plt.show()
