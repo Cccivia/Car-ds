@@ -1,0 +1,30 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+df = pd.read_csv("car_prices.csv")
+df["body"] = df["body"].str.lower()
+state_record =[ ]
+for i in set(df["state"]):
+    if i not in state_record:
+        if len(i) <=2:
+            state_record.append(i)
+
+result_dict = df[df["state"].isin(state_record)].groupby("state")["body"].value_counts().to_dict()
+print(result_dict)
+
+state_data = {}    
+for key, value in result_dict.items():
+    state = key[0]
+    if state not in state_data:
+        state_data[state] = {}
+    state_data[state][key[1]] = value
+
+for state, state_values in state_data.items():
+    plt.figure()
+    plt.bar(state_values.keys(), state_values.values())
+    plt.title(f'Vehicle Types in {state.upper()} State')
+    plt.xlabel('Vehicle Type')
+    plt.ylabel('Numbers of sell')
+    plt.xticks(rotation=90)
+    for i, v in enumerate(state_values.values()):
+        plt.text(i, v, str(v), ha='center', va='bottom',rotation=90)
+plt.show()
