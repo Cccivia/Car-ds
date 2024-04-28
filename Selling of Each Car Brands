@@ -1,0 +1,14 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+df = pd.read_csv("car_prices.csv")
+df["make"] = df["make"].str.lower()
+df["make"] = df["make"].str.split().str[0]
+counts = df["make"].value_counts()
+plt.figure(figsize=(10, 6))  
+counts.plot(kind='bar')      
+plt.title('Selling of Each Car Brands') 
+plt.xlabel("Car Brand")     
+plt.ylabel('Number of selling')   
+for idx, value in enumerate(counts):
+    plt.text(idx, value + 0.1, str(value), ha='center', va='bottom',rotation=90)
+plt.show()            
