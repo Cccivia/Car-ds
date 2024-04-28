@@ -1,0 +1,52 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read data from the CSV file
+df = pd.read_csv("car_prices.csv")
+
+# Calculate profit for each vehicle
+df["profit"] = df["sellingprice"] - df["mmr"]
+
+# Convert brand names to lowercase
+df["make"] = df["make"].astype(str).str.lower()
+
+# Remove "tk" suffix from brand names
+df["make"] = df["make"].apply(lambda x: x.replace("tk", "") if "tk" in x else x)
+
+df["make"] = df["make"].apply(lambda x: x.replace("truck", "") if "truck" in x else x)
+
+# Group by brand and sum the profits
+brand_profit = df.groupby("make")["profit"].sum().to_dict()
+
+sorted_brand_profit = dict(sorted(brand_profit.items(), key=lambda x: x[1], reverse=True))
+
+keys_list = list(sorted_brand_profit.keys())
+
+values_list = list(sorted_brand_profit.values())
+
+# Extract top 10 and bottom 10 items
+top_10_keys = keys_list[:9]
+top_10_values = values_list[:9]
+
+bottom_10_keys = keys_list[-9:]
+bottom_10_values = values_list[-9:]
+
+# Plot top 10 values and keys
+plt.figure(figsize=(12, 6))
+plt.bar(top_10_keys, top_10_values, color='green')
+plt.title('Top 9 Brands by Net Profit')
+plt.xlabel('Brand')
+plt.ylabel('Net Profit')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.show()
+
+# Plot bottom 10 values and keys
+plt.figure(figsize=(12, 6))
+plt.bar(bottom_10_keys, bottom_10_values, color='red')
+plt.title('Bottom 9 Brands by Net Profit')
+plt.xlabel('Brand')
+plt.ylabel('Net Profit')
+plt.xticks(rotation=45, ha='right')
+plt.tight_layout()
+plt.show()
