@@ -1,0 +1,13 @@
+import pandas as pd
+df = pd.read_csv("car_prices.csv")
+df["profit"] = df["sellingprice"] - df["mmr"]
+data = df[df["profit"] > 0].make
+profit_brand = {}
+
+for vehicle in data:
+    if vehicle not in profit_brand:
+        profit_brand[vehicle] = 1
+    else:
+        profit_brand[vehicle] += 1
+profit_brand = dict(sorted(profit_brand.items(), key=lambda x: x[1], reverse=False))
+print(profit_brand)
